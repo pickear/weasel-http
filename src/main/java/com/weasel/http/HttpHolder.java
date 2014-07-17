@@ -24,10 +24,10 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-import org.apache.commons.lang.Validate;
 
+import com.weasel.core.helper.DemonPredict;
+import com.weasel.helper.JsonHelper;
 import com.weasel.http.exception.IOCommunicateException;
-import com.weasel.lang.helper.DocumentConverter;
 
 /**http客户端
  * @author Dylan
@@ -135,7 +135,7 @@ public class HttpHolder {
 		}/*
 		 * finally{ releaseConnection(method); }
 		 */
-		return DocumentConverter.jsonToEntity(json, clazz);
+		return JsonHelper.fromJsonString(json, clazz);
 		
 	}
 
@@ -162,7 +162,7 @@ public class HttpHolder {
 	 */
 	public NameValuePair[] createNameValuePair(Map<String,String> params){
 		
-		Validate.notNull(params);
+		DemonPredict.notNull(params);
 		List<NameValuePair> pairs = new ArrayList<NameValuePair>();
 		
 		for(String key : params.keySet()){
@@ -180,8 +180,9 @@ public class HttpHolder {
 	 * @param headers
 	 */
 	protected void initHeader(HttpMethod method,Map<String,String> headers){
-		Validate.notNull(method);
-		Validate.notNull(headers);
+		
+		DemonPredict.notNull(method);
+		DemonPredict.notNull(headers);
 		for(String key : headers.keySet()){
 			method.addRequestHeader(key, headers.get(key));
 		}
