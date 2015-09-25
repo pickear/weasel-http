@@ -28,14 +28,17 @@ public final class SimpleHttpUploadAndDownload {
 	 * @param file
 	 * @param handler
 	 */
-	public static void upload(String uri,File file,UploadHandler handler){
+	public static void upload(String uri,File[] files,UploadHandler handler){
 		
 		
-		HttpEntity entity = MultipartEntityBuilder.create()
-												  .addBinaryBody("upload_file", file)
+		MultipartEntityBuilder builder = MultipartEntityBuilder.create()
 												  .setCharset(Consts.UTF_8)
-												  .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-												  .build();
+												  .setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+		for(File file : files){
+			builder.addBinaryBody(file.getName(), file);
+		}
+												  
+		HttpEntity entity =	builder.build();
 		
 		CloseableHttpResponse response = HttpClientSecretary.create()
 															.post()
